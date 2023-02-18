@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CC</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="text-container">
+        <h1>你好，</h1>
+        <p class="name">我的名字是曹楚川。</p>
+        <p class="item">一个热爱编程开发、音乐、游戏、电影、动漫的普通青年。</p>
+        <p class="item">
+          你可以联系我通过<a href="mailto:cc.chn@qq.com">邮箱</a>、<a
+            href="https://github.com/ccc0818"
+            target="_blank"
+            >github</a
+          >。
+        </p>
+      </div>
+      <div class="show"></div>
+    </div>
+  </body>
+</html>
+<script>
+  function setTheme(isDark) {
+    if (isDark) {
+      document.documentElement.dataset.theme = "dark";
+    } else {
+      document.documentElement.dataset.theme = "light";
+    }
+  }
+
+  setTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", event => setTheme(event.matches));
+</script>
+<script>
+  // 创建动画
+  const dotNumber = 40;
+  const domFragment = document.createDocumentFragment();
+  for (let i = 0; i < dotNumber; i++) {
+    const newDot = document.createElement("div");
+    newDot.classList.add("dot");
+    domFragment.appendChild(newDot);
+  }
+  const showDom = document.querySelector(".show");
+  showDom.appendChild(domFragment);
+</script>

@@ -1,0 +1,201 @@
+$theme: skyblue;
+
+@mixin dark-theme {
+  background-color: #282c57;
+  color: #eee;
+}
+
+@mixin light-theme {
+  background-color: #fff;
+  color: #202020;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+html {
+  &[data-theme="dark"] {
+    @include dark-theme();
+
+    .dot::after {
+      background-color: #fff;
+    }
+  }
+
+  &[data-theme="light"] {
+    @include light-theme();
+
+    .dot::after {
+      background-color: #000;
+    }
+  }
+}
+
+#app {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  font-family: "圆体-简";
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  overflow: hidden;
+
+  .text-container {
+    width: clamp(300px, 600px, 600px);
+    height: min-content;
+    flex: 0 1 600px;
+    font-size: 14px;
+    padding: 90px 60px;
+
+    h1 {
+      font-size: 2.8em;
+    }
+
+    .name {
+      font-size: 2em;
+      font-weight: 400;
+      margin: 20px 0;
+    }
+
+    .item {
+      font-size: 1.2em;
+      font-weight: 200;
+      line-height: 1.4;
+      margin: 1.8em 0;
+
+      a {
+        position: relative;
+        padding: 0 3px;
+        cursor: pointer;
+
+        &::after {
+          content: "";
+          height: 5px;
+          width: 100%;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          background-color: $theme;
+          z-index: -1;
+          transition: 0.15s;
+        }
+
+        &:hover::after {
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  .show {
+    height: 100%;
+    flex: 1 0 600px;
+    position: relative;
+    display: flex;
+    min-height: 375px;
+
+    .dot {
+      $size: 30px;
+      $dot-number: 40;
+      $duration: 5000ms;
+      $offset: 200%;
+      width: $size;
+      height: $size;
+      position: absolute;
+      transform-style: preserve-3d;
+      perspective: 90px;
+      right: 0;
+      top: 0;
+
+      @keyframes dot-ani-before {
+        0% {
+          animation-timing-function: ease-in;
+        }
+        25% {
+          transform: translate3d(0, $offset, $size);
+          animation-timing-function: ease-out;
+        }
+        50% {
+          transform: translate3d(0, 2*$offset, 0);
+          animation-timing-function: ease-in;
+        }
+        75% {
+          transform: translate3d(0, $offset, -$size);
+          animation-timing-function: ease-out;
+        }
+      }
+      @keyframes dot-ani-after {
+        0% {
+          animation-timing-function: ease-in;
+        }
+        25% {
+          transform: translate3d(0, -$offset, -$size);
+          animation-timing-function: ease-out;
+        }
+        50% {
+          transform: translate3d(0, -$offset*2, 0);
+          animation-timing-function: ease-in;
+        }
+        75% {
+          transform: translate3d(0, -$offset, $size);
+          animation-timing-function: ease-out;
+        }
+      }
+
+      &::after,
+      &::before {
+        content: "";
+        width: $size;
+        height: $size;
+        border-radius: 50%;
+        position: absolute;
+        left: 0;
+      }
+
+      &::after {
+        bottom: -$offset;
+        // background-color: inherit;
+        animation: dot-ani-after $duration infinite;
+      }
+
+      &::before {
+        top: -$offset;
+        background-color: $theme;
+        animation: dot-ani-before $duration infinite;
+      }
+
+      $n: 1;
+      @while $n <= $dot-number {
+        &:nth-of-type(#{$n}) {
+          // transform: rotate(#{($n - 1) * $deg}deg) translateY(-175px);
+          transform: rotate(-45deg) translateX(150% * -($n - 2));
+
+          &::after,
+          &::before {
+            animation-delay: -$n * 600ms;
+          }
+        }
+        $n: $n + 1;
+      }
+    }
+  }
+
+  @media (width < 800px) {
+    & {
+      display: block;
+    }
+
+    .text-container {
+      width: 100%;
+    }
+  }
+}
